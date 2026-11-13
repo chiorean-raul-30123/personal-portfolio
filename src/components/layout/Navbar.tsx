@@ -1,0 +1,10 @@
+import { Menu, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+const links = [['home', 'Home'], ['about', 'About'], ['projects', 'Projects'], ['experience', 'Experience'], ['tech-stack', 'Tech Stack'], ['contact', 'Contact']] as const;
+
+export function Navbar() {
+  const [open, setOpen] = useState(false); const [scrolled, setScrolled] = useState(false); const [active, setActive] = useState('home');
+  useEffect(() => { const onScroll = () => { setScrolled(window.scrollY > 24); const current = links.map(([id]) => [id, document.getElementById(id)?.getBoundingClientRect().top ?? Infinity] as const).filter(([, top]) => top <= 140).pop()?.[0]; if (current) setActive(current); }; window.addEventListener('scroll', onScroll, { passive: true }); onScroll(); return () => window.removeEventListener('scroll', onScroll); }, []);
+  return <header className={`fixed inset-x-0 top-0 z-50 transition ${scrolled ? 'border-b border-white/8 bg-[#090a0c]/75 backdrop-blur-xl' : ''}`}><nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Primary"><a href="#home" className="font-mono text-sm tracking-[0.25em] text-white">RC<span className="text-amber-200">/</span>DEV</a><button className="rounded-md p-2 text-white md:hidden" aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button><div className={`${open ? 'absolute left-4 right-4 top-16 flex' : 'hidden'} flex-col gap-1 rounded-2xl border border-white/10 bg-[#101114]/95 p-3 shadow-2xl md:static md:flex md:flex-row md:items-center md:gap-7 md:border-0 md:bg-transparent md:p-0 md:shadow-none`}>{links.map(([id, label]) => <a key={id} href={`#${id}`} onClick={() => setOpen(false)} className={`rounded-full px-3 py-2 text-sm transition ${active === id ? 'text-amber-100' : 'text-white/55 hover:text-white'}`}>{label}</a>)}<a href="/assets/docs/raul-chiorean-cv.pdf" target="_blank" rel="noopener noreferrer" download="raul-chiorean-cv.pdf" onClick={() => setOpen(false)} className="rounded-full px-3 py-2 text-sm text-amber-100/80 transition hover:text-white">Resume</a></div></nav></header>;
+}

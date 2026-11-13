@@ -1,0 +1,1 @@
+export function Footer(){return <footer className="border-t border-white/8 px-6 py-8 text-sm text-white/40"><div className="mx-auto flex max-w-7xl justify-between gap-4 font-mono"><span>© 2026 / RCDEV</span><span>Built for the next iteration.</span></div></footer>}
